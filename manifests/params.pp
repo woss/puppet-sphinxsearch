@@ -5,10 +5,10 @@ class sphinxsearch::params {
       $service = 'searchd'
       $service_hasstatus = false
       $service_hasrestart = true
-      $user = 'sphinx'
-      $group = 'sphinx'
-      $config_dir = '/etc/sphinx'
-      $work_dir = '/var/lib/sphinx/index'
+      $user = 'sphinxsearch'
+      $group = 'sphinxsearch'
+      $config_dir = '/etc/sphinxsearch'
+      $work_dir = '/var/lib/sphinxsearch/index'
       $default_file = '/etc/default/searchd'
     }
     default: {

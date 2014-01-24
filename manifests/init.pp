@@ -100,7 +100,7 @@ class sphinxsearch(
   $config_dir = $sphinxsearch::params::config_dir,
   $default_file = $sphinxsearch::params::default_file,
   $work_dir = $sphinxsearch::params::work_dir,
-  $work_dir_recurse = false,
+  $work_dir_recurse = true,
   $work_dir_mode = '0640',
   $user = $sphinxsearch::params::user,
   $group = $sphinxsearch::params::group,
@@ -175,8 +175,8 @@ class sphinxsearch(
 
   file { $config_dir:
     ensure  => $dir_ensure,
-    owner   => $user,
-    group   => $group,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0640',
     recurse => true,
     purge   => true,
@@ -185,11 +185,20 @@ class sphinxsearch(
     notify  => Service[$service],
   }
 
+  file { "/var/lib/sphinx":
+    ensure => directory,
+  }
+
+  file { '/etc/init.d/searchd':
+    ensure => link,
+    target => "/etc/init.d/sphinxsearch"
+  }
+
   file { $work_dir:
     ensure  => $dir_ensure,
     owner   => $user,
-    group   => $group,
-    mode    => $work_dir_mode,
+    group   => 'root',
+    mode    => $work_dirmode,
     force   => true,
     recurse => $work_dir_recurse,
     require => Package[$package],
@@ -200,8 +209,8 @@ class sphinxsearch(
     ensure     => $file_ensure,
     source     => $config_source,
     config_dir => $config_dir,
-    user       => $user,
-    group      => $group,
+    user       => 'root',
+    group      => 'root',
     require    => File[$work_dir],
     notify     => Service[$service],
   }

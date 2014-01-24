@@ -5,7 +5,7 @@ define sphinxsearch::instance(
   $user = $sphinxsearch::params::user,
   $group = $sphinxsearch::params::group,
   $service = $sphinxsearch::params::service,
-  $require = Class['sphinxsearch']
+  $require = Class['sphinxsearch'] 
 ) {
   if $name == '0' {
     $instance_config_name = 'sphinx.conf'
@@ -15,11 +15,11 @@ define sphinxsearch::instance(
 
   file { "${config_dir}/${instance_config_name}":
     ensure  => $ensure,
-    owner   => $user,
-    group   => $group,
+    owner   => 'root',
+    group   => 'root',
     mode    => '0640',
     source  => "${source}/${instance_config_name}",
     require => $require,
-    notify  => Service[$service],
+    notify  => Service[$service], 
   }
 }
