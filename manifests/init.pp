@@ -177,7 +177,7 @@ class sphinxsearch(
     ensure  => $dir_ensure,
     owner   => 'root',
     group   => 'root',
-    mode    => '0640',
+    mode    => '0755',
     recurse => true,
     purge   => true,
     force   => true,
@@ -194,10 +194,24 @@ class sphinxsearch(
     target => "/etc/init.d/sphinxsearch"
   }
 
+  file { $default_log_dir :
+    ensure => present,
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0755'
+  }
+
+  file { [ $default_log_name,$default_query_log_name] :
+    ensure => file,
+    owner => $user,
+    group => $group,
+    mode => '0755'
+  }
+
   file { $work_dir:
     ensure  => $dir_ensure,
     owner   => $user,
-    group   => 'root',
+    group   => $group,
     mode    => $work_dirmode,
     force   => true,
     recurse => $work_dir_recurse,
@@ -209,8 +223,6 @@ class sphinxsearch(
     ensure     => $file_ensure,
     source     => $config_source,
     config_dir => $config_dir,
-    user       => 'root',
-    group      => 'root',
     require    => File[$work_dir],
     notify     => Service[$service],
   }

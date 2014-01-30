@@ -15,8 +15,8 @@ define sphinxsearch::instance(
 
   file { "${config_dir}/${instance_config_name}":
     ensure  => $ensure,
-    owner   => 'root',
-    group   => 'root',
+    owner   => $user,
+    group   => $group,
     mode    => '0640',
     source  => "${source}/${instance_config_name}",
     require => $require,
